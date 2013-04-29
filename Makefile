@@ -1,5 +1,5 @@
 
-.PHONY: all clean
+.PHONY: all clean install install-lua remove remove-lua
 
 UNAME := $(shell uname)
 
@@ -19,6 +19,14 @@ ifeq ($(UNAME),SunOS)
   RANLIB = ranlib
 endif
 
+# =============================================
+
+INCLUDE = /usr/local/include
+LIB     = /usr/local/lib
+LUALIB  = /usr/local/lib/lua/5.1
+
+# ============================================
+
 all : lib obj lib/libspcuuid.a
 
 lua : so lib/lua-uuid.so
@@ -31,6 +39,8 @@ obj :
 
 so : 
 	mkdir so
+
+# ==========================================
 
 lib/libspcuuid.a : obj/uuid_ns_dns.o	\
 		obj/uuid_ns_null.o	\
@@ -152,5 +162,21 @@ so/uuidlib_v5.o : src/uuidlib_v5.c src/uuid.h
 
 # ===================================================
 
+install:
+	install -d $(INCLUDE)/org/coman
+	install src/uuid.h $(INCLUDE)/org/conman
+	install lib/libspcuuid.a $(LIB)
+
+remove:
+	$(RM) -rf $(INCLUDE)/org/conman/uuid.h
+	$(RM) -rf $(LIB)/libspcuuid.a
+	
+install-lua:
+	install -d $(LUALIB)/org/conman
+	install lib/lua-uuid.so $(LUALIB)/org/conman/uuid.so
+
+remove-lua:
+	$(RM) -rf $(LUALIB)/org/conman/uuid.so
+	
 clean:
 	$(RM) -rf *~ src/*~ lib/ obj/ so/
