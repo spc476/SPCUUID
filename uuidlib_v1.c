@@ -23,6 +23,9 @@
 #  define _GNU_SOURCE
 #endif
 
+#include <errno.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include <time.h>
 #include <assert.h>
 #include <string.h>
