@@ -36,6 +36,7 @@
 #include <lauxlib.h>
 
 #include "uuid.h"
+#include "../version.h"
 
 #define TYPE_UUID	"org.conman.uuid:UUID"
 
@@ -78,6 +79,9 @@ int luaopen_org_conman_uuid(lua_State *const L)
   luaL_register(L,NULL,muuid_meta);
   
   luaL_register(L,"org.conman.uuid",muuid_reg);
+  
+  lua_pushliteral(L,VERSION);
+  lua_setfield(L,-2,"_VERSION");
   
   uuidluaL_pushuuid(L,&c_uuid_namespace_dns);
   lua_setfield(L,-2,"DNS");

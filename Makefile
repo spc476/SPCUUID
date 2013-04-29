@@ -139,7 +139,7 @@ obj/uuidlib_v5.o : src/uuidlib_v5.c src/uuid.h
 
 # ===================================================
 
-so/luauuid.o : src/luauuid.c src/uuid.h
+so/luauuid.o : src/luauuid.c src/uuid.h version.h
 	$(CC) $(CFLAGS) $(SHARED) -c -o $@ $<
 
 so/uuid_ns_dns.o : src/uuid_ns_dns.c src/uuid.h
@@ -184,6 +184,11 @@ so/uuidlib_v5.o : src/uuidlib_v5.c src/uuid.h
 
 # ===================================================
 
+version.h :
+	scripts/post-commit
+
+# ===================================================
+
 install: lib obj lib/libspcuuid.a
 	install -d $(INCLUDE)/org/coman
 	install src/uuid.h $(INCLUDE)/org/conman
@@ -201,4 +206,4 @@ remove-lua:
 	$(RM) -rf $(LUALIB)/org/conman/uuid.so
 	
 clean:
-	$(RM) -rf *~ src/*~ lib/ obj/ so/
+	$(RM) -rf *~ version.h src/*~ lib/ obj/ so/
