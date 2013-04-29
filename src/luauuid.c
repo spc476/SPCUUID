@@ -74,9 +74,6 @@ static const struct luaL_reg muuid_meta[] =
 
 int luaopen_org_conman_uuid(lua_State *const L)
 {
-  if (uuidlib_init() != 0)
-    return 0;
-  
   luaL_newmetatable(L,TYPE_UUID);
   luaL_register(L,NULL,muuid_meta);
   
