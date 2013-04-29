@@ -154,6 +154,3 @@ so/uuidlib_v5.o : src/uuidlib_v5.c src/uuid.h
 
 clean:
 	$(RM) -rf *~ src/*~ lib/ obj/ so/
-
-
-
