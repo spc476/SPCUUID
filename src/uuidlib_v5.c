@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <openssl/evp.h>
 
-#include "uuidlib.h"
+#include "uuid.h"
 
 /*************************************************************************/
 

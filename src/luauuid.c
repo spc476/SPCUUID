@@ -35,7 +35,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "uuidlib.h"
+#include "uuid.h"
 
 #define TYPE_UUID	"org.conman.uuid:UUID"
 

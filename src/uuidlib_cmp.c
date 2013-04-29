@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <arpa/inet.h>
 
-#include "uuidlib.h"
+#include "uuid.h"
 
 /*************************************************************************/
 

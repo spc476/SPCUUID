@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "uuidlib.h"
+#include "uuid.h"
 
 /*************************************************************************/
 

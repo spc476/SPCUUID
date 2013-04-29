@@ -41,7 +41,7 @@
 #  include <sys/sockio.h>
 #endif
 
-#include "uuidlib.h"
+#include "uuid.h"
 
 /**************************************************************************/
 
