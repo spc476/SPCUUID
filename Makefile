@@ -17,9 +17,9 @@ ifeq ($(UNAME),SunOS)
   RANLIB = ranlib
 endif
 
-all : libuuidlib.a
+all : libspcuuid.a
 
-libuuidlib.a : uuid_ns_dns.o	\
+libspcuuid.a : uuid_ns_dns.o	\
 		uuid_ns_null.o	\
 		uuid_ns_oid.o	\
 		uuid_ns_url.o	\
@@ -77,5 +77,5 @@ uuidlib_v5.o : uuidlib_v5.c uuidlib.h
 # ===================================================
 
 clean:
-	$(RM) -rf *.o *~ libuuidlib.a
+	$(RM) -rf *.o *~ libspcuuid.a
 
