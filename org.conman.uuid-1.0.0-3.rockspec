@@ -1,5 +1,5 @@
 package = "org.conman.uuid"
-version = "1.0.0-2"
+version = "1.0.0-3"
 
 source =
 {
@@ -19,20 +19,6 @@ description =
 	org.conman.uuid provides functionality to generate UUIDs based on
 	RFC-4122.  It supports MAC/timed based UUIDs (v1), name-based UUIDs
 	(v3/MD5,v5/SHA-1) and random UUIDs (v4).
-
-		uuidv1 = org.conman.uuid(1)
-		uuidv3 = org.conman.uuid(uuid,stringdata)
-		uuidv4 = org.conman.uuid()
-		uuidv5 = org.conman.uuid(uuid,stringdata)
-
-	Also defined are the following UUIDS:
-
-		org.conman.uuid.URL
-		org.conman.uuid.DNS
-		org.conman.uuid.X500
-		org.conman.uuid.OID
-		org.conman.uuid.NIL
-
   ]]
 }
 
