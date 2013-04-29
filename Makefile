@@ -193,7 +193,7 @@ remove:
 	$(RM) -rf $(LIB)/libspcuuid.a
 	
 install-lua: lua
-	install -d $(LIBIDR)/org/conman
+	install -d $(LIBDIR)/org/conman
 	install lib/lua-uuid.so $(LIBDIR)/org/conman/uuid.so
 
 remove-lua:
