@@ -1,0 +1,5 @@
+#!/usr/bin/env lua
+env = require "org.conman.env"
+show = require "org.conman.table".show
+show(env)
+os.exit(0)
