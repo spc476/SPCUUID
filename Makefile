@@ -193,8 +193,7 @@ remove:
 	$(RM) -rf $(INCLUDE)/org/conman/uuid.h
 	$(RM) -rf $(LIB)/libspcuuid.a
 	
-install-lua: lib so lib/lua-uuid.so
-	scripts/penv	
+install-lua: lua
 	install -d $(LIBIDR)/org/conman
 	install lib/lua-uuid.so $(LIBDIR)/org/conman/uuid.so
 
