@@ -51,7 +51,7 @@ LUA_LIBDIR  = /usr/local/lib/lua/5.1
 
 all : lib obj lib/libspcuuid.a
 
-lua : so lib/lua-uuid.so
+lua : so lib lib/lua-uuid.so
 
 lib :
 	mkdir lib
