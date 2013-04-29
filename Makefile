@@ -45,7 +45,7 @@ endif
 
 INCLUDE = /usr/local/include
 LIB     = /usr/local/lib
-LIBDIR  = /usr/local/lib/lua/5.1
+LUALIB  = /usr/local/lib/lua/5.1
 
 # ============================================
 
@@ -193,8 +193,8 @@ remove:
 	$(RM) -rf $(LIB)/libspcuuid.a
 	
 install-lua: lua
-	install -d $(LIBDIR)/org/conman
-	install lib/lua-uuid.so $(LIBDIR)/org/conman/uuid.so
+	install -d $(LUALIB)/org/conman
+	install lib/lua-uuid.so $(LUALIB)/org/conman/uuid.so
 
 remove-lua:
 	$(RM) -rf $(LUALIB)/org/conman/uuid.so
