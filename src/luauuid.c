@@ -36,9 +36,9 @@
 #include <lauxlib.h>
 
 #include "uuid.h"
-#include "../version.h"
 
 #define TYPE_UUID	"org.conman.uuid:UUID"
+#define VERSION		"0.9.57"
 
 /***********************************************************************/
 
