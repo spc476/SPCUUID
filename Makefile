@@ -7,6 +7,7 @@ ifeq ($(UNAME),Linux)
   CC      = gcc -std=c99
   CFLAGS  = -g -Wall -Wextra -pedantic
   LDFLAGS = -shared
+  LDLIBS  = -lrt -lcrypto
   SHARED  = -fPIC
   AR      = ar rcu
   RANLIB  = ranlib
@@ -15,6 +16,7 @@ endif
 ifeq ($(UNAME),SunOS)
   CC     = cc -xc99
   CFLAGS = -g
+  LDLIBS = -lrt -lsocket -lnsl -lcrypto
   AR     = ar rcu
   RANLIB = ranlib
 endif
@@ -72,7 +74,7 @@ lib/lua-uuid.so : so/luauuid.o		\
 		so/uuidlib_v3.o		\
 		so/uuidlib_v4.o		\
 		so/uuidlib_v5.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 # ===========================================================
 
