@@ -45,7 +45,7 @@ endif
 
 INCLUDE = /usr/local/include
 LIB     = /usr/local/lib
-LUALIB  = /usr/local/lib/lua/5.1
+LIBDIR  = /usr/local/lib/lua/5.1
 
 # ============================================
 
