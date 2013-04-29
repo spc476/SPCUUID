@@ -43,9 +43,9 @@ endif
 
 # =============================================
 
-INCLUDE     = /usr/local/include
-LIB         = /usr/local/lib
-LUA_LIBDIR  = /usr/local/lib/lua/5.1
+INCLUDE = /usr/local/include
+LIB     = /usr/local/lib
+LIBDIR  = /usr/local/lib/lua/5.1
 
 # ============================================
 
