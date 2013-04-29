@@ -73,15 +73,13 @@ extern const uuid__t c_uuid_namespace_oid;
 extern const uuid__t c_uuid_namespace_x500;
 extern const uuid__t c_uuid_null;
 
-int	uuidlib_init		(void);
-int	uuidlib_v1		(uuid__t *const);
-int	uuidlib_v2		(uuid__t *const) __attribute__((unused));
-int	uuidlib_v3		(uuid__t *const,const uuid__t *const,const void *const,const size_t);
-int	uuidlib_v4		(uuid__t *const);
-int	uuidlib_v5		(uuid__t *const,const uuid__t *const,const void *const,const size_t);
-int	uuidlib_cmp		(const uuid__t *const restrict,const uuid__t *const restrict);
-int	uuidlib_parse_seg	(uuid__t *const,size_t,const char **,const size_t);
-int	uuidlib_parse		(uuid__t *const,const char *);
-size_t	uuidlib_toa		(const uuid__t *const,char *dest,size_t);
+int	uuidlib_v1		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
+int	uuidlib_v2		(uuid__t *const) __attribute__((unused))                             __attribute__((nonnull,nothrow));
+int	uuidlib_v3		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
+int	uuidlib_v4		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
+int	uuidlib_v5		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
+int	uuidlib_cmp		(const uuid__t *const restrict,const uuid__t *const restrict)        __attribute__((nonnull,nothrow));
+int	uuidlib_parse		(uuid__t *const,const char *)                                        __attribute__((nonnull,nothrow));
+size_t	uuidlib_toa		(const uuid__t *const,char *dest,size_t)                             __attribute__((nonnull,nothrow));
 
 #endif
