@@ -1,0 +1,133 @@
+
+SPCUUID: The rather complete UUID generation library
+
+SPCUUID implements an API to generate RFC-4122 style UUIDs, which include 
+the following UUID versions:
+
+	1. the time based version (also uses a MAC address if found)
+	2. not implemented/not described in RFC-4122
+	3. name-based varsion which uses MD5 hashing
+	4. a randomly generated UUID
+	5. name-based version which uses SHA-1 hashing
+
+This library also includes definitions for the following UUIDs (as
+specificed in RFC-4122):
+
+	1. DNS  UUID: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+	2. URL  UUID: 6ba7b811-9dad-11d1-80b4-00c04fd430c8
+	3. OID  UUID: 6ba7b812-9dad-11d1-80b4-00c04fd430c8
+	4. X500 UUID: 6ba7b814-9dad-11d1-80b4-00c04fd430c8
+	5. NULL UUID: 00000000-0000-0000-0000-000000000000
+
+These are declared as:
+
+	extern const uuid__t c_uuid_namespace_dns;
+	extern const uuid__t c_uuid_namespace_url;
+	extern const uuid__t c_uuid_namespace_oid;
+	extern const uuid__t c_uuid_namespace_x500;
+	extern const uuid__t c_uuid_null;
+
+The following functions are defined:
+
+	int uuidlib_cmp(const uuid__t *a,const uuid__t *b);
+
+		This function compares two UUIDs and returns a negative
+		value if a is less than b, 0 if a is equal to b, and a
+		positive value if a is larger than b.  
+
+	int uuidlib_parse(uuid__t *uuid,const char *text);
+
+		This function will parse a text representation of a UUID. 
+		It returns 0 on success, or an error suitable for use
+		with strerror().
+
+	int uuidlib_toa(const uuid__t *uuid,char *dest,size_t);
+
+		This function will format a uuid__t for display purposes.
+		It returns the number of characters written (36) on success,
+		a negative value if there was an error.
+
+	int uuidlib_v1(uuid__t *uuid);
+
+		Generates a version 1 UUID, based off a MAC address and
+		the current time.  If a MAC address cannot be found, a
+		random MAC will be generated.
+
+	int uuidlib_v2(uuid__t *uuid);
+
+		Not implemented---returns ENOSYS.
+
+	int uuidlib_v3(
+		uuid__t       *uuid,
+		const uuid__t *ns,
+		const void    *data,
+		const size_t   size
+	);
+
+		Generates a name-based UUID from the given UUID (ns) and
+		data (data,size) using an MD5 hash.  Returns 0 if success.
+		You must link to -lcrypto if you use this function.
+
+	int uuidlib_v4(uuid__t *uuid);
+
+		Generates a random UUID.  This function assumes that srand()
+		has been called prior.  Returns 0 if success.
+
+	int uuidlib_v5(
+		uuid__t       *uuid,
+		const uuid__t *ns,
+		const void    *data,
+		const size_t   size
+	);
+	
+		Generates a name-based UUID from the given UUID (ns) and
+		data (data,size) using an MD5 hash.  Returns 0 if success.
+		You must link to -lcrypto if you use this function.
+
+The Lua bindings:
+
+	require "org.conman.uuid"
+
+The predefined UUIDs are:
+
+	org.conman.uuid.URL
+	org.conman.uuid.DNS
+	org.conman.uuid.X500
+	org.conman.uuid.OID
+	org.conman.uuid.NIL
+
+Functions are:
+
+	org.conman.uuid.parse(string)
+
+		Parse a string into a UUID
+
+	org.conman.uuid.breakout(uuid)
+
+		Return a table with the UUID broken down into fields (only
+		valid for a v1 UUID, but will break down any UUID)
+
+	org.conman.uuid()
+
+		Return a v4 UUID (random UUID)
+
+	org.conman.uuid(1)
+
+		Return a v1 UUID (MAC/time based UUID)
+
+	org.conman.uuid(uuid,string)
+	
+		Return a v5 UUID (SHA-1 name-based UUID)
+
+	org.conman.uuid(uuid,string,true)
+
+		Return a v3 UUID (MD5 name-based UUID)
+
+UUIDs support the following metamethods:
+
+	__tostring	- returns display format
+	__eq		- compares two UUIDs
+	__lt		- compares two UUIDs
+	__le		- compares two UUIDs
+	__len		- returns 16
+
