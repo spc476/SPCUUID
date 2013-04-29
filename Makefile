@@ -162,7 +162,7 @@ so/uuidlib_v5.o : src/uuidlib_v5.c src/uuid.h
 
 # ===================================================
 
-install:
+install: lib obj lib/libspcuuid.a
 	install -d $(INCLUDE)/org/coman
 	install src/uuid.h $(INCLUDE)/org/conman
 	install lib/libspcuuid.a $(LIB)
@@ -171,7 +171,7 @@ remove:
 	$(RM) -rf $(INCLUDE)/org/conman/uuid.h
 	$(RM) -rf $(LIB)/libspcuuid.a
 	
-install-lua:
+install-lua: lib so lib/lua-uuid.so
 	install -d $(LUALIB)/org/conman
 	install lib/lua-uuid.so $(LUALIB)/org/conman/uuid.so
 
