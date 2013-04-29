@@ -26,7 +26,7 @@
 
 /***************************************************************************/
 
-size_t uuidlib_toa(const uuid__t *const uuid,char *dest,size_t size)
+int uuidlib_toa(const uuid__t *const uuid,char *dest,size_t size)
 {
   assert(uuid != NULL);
   assert(dest != NULL);
