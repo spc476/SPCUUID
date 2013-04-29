@@ -194,6 +194,8 @@ remove:
 	$(RM) -rf $(LIB)/libspcuuid.a
 	
 install-lua: lib so lib/lua-uuid.so
+	echo HERE I AM JH
+	echo $(LIBDIR)
 	install -d $(LIBIDR)/org/conman
 	install lib/lua-uuid.so $(LIBDIR)/org/conman/uuid.so
 
