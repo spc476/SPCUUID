@@ -134,7 +134,11 @@ int uuidlib_v1(uuid__t *const uuid)
   assert(uuid != NULL);
   
   if (!m_init)
-    uuidlib_init();
+  {
+    int rc = uuidlib_init();
+    if (rc != 0)
+      return rc;
+  }
   
   clock_gettime(CLOCK_REALTIME,&now);
   timestamp = (now.tv_sec * 10000000LL)
