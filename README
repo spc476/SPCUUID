@@ -115,7 +115,9 @@ Functions are:
 
 		Return a v1 UUID (MAC/time based UUID).  If n < 0, then
 		the "clock sequence" portion of the UUID will be randomly
-		generated; otherwise, the value of n is used.
+		generated; otherwise, the value of n is used.  n should
+		increase with each call; if you really don't care manage
+		this, passing in a -1 should be used.
 
 	org.conman.uuid(uuid,string)
 	
