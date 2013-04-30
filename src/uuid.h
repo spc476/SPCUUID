@@ -36,6 +36,7 @@
   typedef unsigned int   rand__t;
 #endif
 
+#define UUID_VERSION	"1.1.0"
 #define UUID_EPOCH	0x01B21DD213814000LL
 
 /*******************************************************************/
@@ -73,7 +74,7 @@ extern const uuid__t c_uuid_namespace_oid;
 extern const uuid__t c_uuid_namespace_x500;
 extern const uuid__t c_uuid_null;
 
-int	uuidlib_v1		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
+int	uuidlib_v1		(uuid__t *const,const int)                                           __attribute__((nonnull,nothrow));
 int	uuidlib_v2		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
 int	uuidlib_v3		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
 int	uuidlib_v4		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));

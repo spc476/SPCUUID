@@ -111,9 +111,11 @@ Functions are:
 
 		Return a v4 UUID (random UUID)
 
-	org.conman.uuid(1)
+	org.conman.uuid(n)
 
-		Return a v1 UUID (MAC/time based UUID)
+		Return a v1 UUID (MAC/time based UUID).  If n < 0, then
+		the "clock sequence" portion of the UUID will be randomly
+		generated; otherwise, the value of n is used.
 
 	org.conman.uuid(uuid,string)
 	

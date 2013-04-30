@@ -126,7 +126,7 @@ uuidlib_init_error:
 
 /***********************************************************************/
 
-int uuidlib_v1(uuid__t *const uuid)
+int uuidlib_v1(uuid__t *const uuid,const int clock)
 {
   struct timespec now;
   int64_t         timestamp;
@@ -147,8 +147,16 @@ int uuidlib_v1(uuid__t *const uuid)
   uuid->uuid.time_hi_and_version       = htons(timestamp >> 48);
   uuid->uuid.time_mid                  = htons((timestamp >> 32) & 0xFFFFLL);
   uuid->uuid.time_low                  = htonl(timestamp & 0xFFFFFFFFLL);
-  uuid->uuid.clock_seq_hi_and_reserved = rand() & 0xFF;
-  uuid->uuid.clock_seq_low             = rand() & 0xFF;
+  if (clock < 0)
+  {
+    uuid->uuid.clock_seq_hi_and_reserved = rand() & 0xFF;
+    uuid->uuid.clock_seq_low             = rand() & 0xFF;
+  }
+  else
+  {
+    uuid->uuid.clock_seq_hi_and_reserved = (clock >> 8) & 0xFF;
+    uuid->uuid.clock_seq_low             = clock & 0xFF;
+  }
   memcpy(uuid->uuid.node,m_mac,6);
   
   uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x10;

@@ -38,7 +38,6 @@
 #include "uuid.h"
 
 #define TYPE_UUID	"org.conman.uuid:UUID"
-#define VERSION		"0.9.57"
 
 /***********************************************************************/
 
@@ -80,7 +79,7 @@ int luaopen_org_conman_uuid(lua_State *const L)
   
   luaL_register(L,"org.conman.uuid",muuid_reg);
   
-  lua_pushliteral(L,VERSION);
+  lua_pushliteral(L,UUID_VERSION);
   lua_setfield(L,-2,"_VERSION");
   
   uuidluaL_pushuuid(L,&c_uuid_namespace_dns);
@@ -201,7 +200,7 @@ static int uuidlua_meta___call(lua_State *const L)
   else if (lua_isnumber(L,2))
   {
     uuid = lua_newuserdata(L,sizeof(uuid__t));
-    uuidlib_v1(uuid);
+    uuidlib_v1(uuid,lua_tointeger(L,2));
   }
   else if (lua_isstring(L,2))
   {
@@ -243,7 +242,7 @@ static int uuidlua_meta___call(lua_State *const L)
   else
   {
     uuid = lua_newuserdata(L,sizeof(uuid__t));
-    uuidlib_v1(uuid);
+    uuidlib_v1(uuid,-1);
   }
   
   luaL_getmetatable(L,TYPE_UUID);
