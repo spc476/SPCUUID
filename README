@@ -47,11 +47,13 @@ The following functions are defined:
 		It returns the number of characters written (36) on success,
 		a negative value if there was an error.
 
-	int uuidlib_v1(uuid__t *uuid);
+	int uuidlib_v1(uuid__t *uuid,int clockseq);
 
 		Generates a version 1 UUID, based off a MAC address and
 		the current time.  If a MAC address cannot be found, a
-		random MAC will be generated.
+		random MAC will be generated.  If clockseq is less than
+		0, a random clock sequence value will be generated;
+		otherwise, the value given will be used.
 
 	int uuidlib_v2(uuid__t *uuid);
 
