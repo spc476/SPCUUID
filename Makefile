@@ -29,18 +29,21 @@ ifeq ($(UNAME),Linux)
   LDFLAGS = -shared
   LDLIBS  = -lrt -lcrypto
   SHARED  = -fPIC
-  AR      = ar rcu
-  RANLIB  = ranlib
 endif
 
 ifeq ($(UNAME),SunOS)
   CC     = cc -xc99
   CFLAGS = -g
   LDLIBS = -lrt -lsocket -lnsl -lcrypto
-  AR     = ar rcu
-  RANLIB = ranlib
 endif
 
+ifeq ($(UNAME),Darwin)
+  CC      = gc -std=c99
+  CFLAGS  = -g -Wall -Wextra -pedantic
+  LDFLAGS = -shared
+  SHARED  = -fPIC -undefined dynamic_lookup -all_load
+endif
+  
 # =============================================
 
 INCLUDE = /usr/local/include
@@ -83,8 +86,7 @@ lib/libspcuuid.a : obj/uuid_ns_dns.o	\
 		obj/uuidlib_v3.o	\
 		obj/uuidlib_v4.o	\
 		obj/uuidlib_v5.o
-	$(AR) $@ $?
-	$(RANLIB) $@
+	$(AR) rscu $@ $?
 
 lib/lua-uuid.so : so/luauuid.o		\
 		so/uuid_ns_dns.o	\
