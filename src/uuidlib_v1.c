@@ -30,16 +30,16 @@
 #include <assert.h>
 #include <string.h>
 
-#include <sys/ioctl.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <netinet/in.h>
-
-#ifdef __SunOS
+#if defined(__SunOS) || defined(__APPLE__)
 #  include <net/if_arp.h>
 #  include <sys/socket.h>
 #  include <sys/sockio.h>
 #endif
+
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <netinet/in.h>
 
 #include "uuid.h"
 
@@ -81,14 +81,18 @@ static int uuidlib_init(void)
     if ((it->ifr_flags & IFF_LOOPBACK) == IFF_LOOPBACK)
       continue;
 
-#ifdef __SunOS
+#if defined(__SunOS)
     struct arpreq arpreq;
 
     memcpy(&arpreq.arp_pa,&it->ifr_addr,sizeof(it->ifr_addr));
     if (ioctl(sock,SIOCGARP,&arpreq) < 0)
       goto uuidlib_init_error;
     memcpy(m_mac,arpreq.arp_ha.sa_data,sizeof(m_mac));
-#else      
+#elif defined(__APPLE__)
+    if (ioctl(sock,SIOCGIFMAC,it) < 0)
+      goto uuidlib_init_error;
+    memcpy(m_mac,it->ifr_addr.sa_data,sizeof(m_mac));
+#elif defined(__linux__)
     if (ioctl(sock,SIOCGIFHWADDR,it) < 0)
       goto uuidlib_init_error;
     memcpy(m_mac,it->ifr_hwaddr.sa_data,sizeof(m_mac));
@@ -128,8 +132,7 @@ uuidlib_init_error:
 
 int uuidlib_v1(uuid__t *const uuid,const int clock)
 {
-  struct timespec now;
-  int64_t         timestamp;
+  int64_t timestamp;
   
   assert(uuid != NULL);
   
@@ -139,11 +142,23 @@ int uuidlib_v1(uuid__t *const uuid,const int clock)
     if (rc != 0)
       return rc;
   }
+
+#ifdef __APPLE__
+  struct timeval now;
+  
+  gettimeofday(&now,NULL);
+  timestamp = (now.tv_sec  * 1000000LL)
+            + (now.tv_usec *      10LL)
+            + UUID_EPOCH;
+#else
+  struct timespec now;
   
   clock_gettime(CLOCK_REALTIME,&now);
-  timestamp = (now.tv_sec * 10000000LL)
-            + (now.tv_nsec / 100LL)
+  timestamp = (now.tv_sec  * 10000000LL)
+            + (now.tv_nsec /      100LL)
             + UUID_EPOCH;
+#endif
+
   uuid->uuid.time_hi_and_version       = htons(timestamp >> 48);
   uuid->uuid.time_mid                  = htons((timestamp >> 32) & 0xFFFFLL);
   uuid->uuid.time_low                  = htonl(timestamp & 0xFFFFFFFFLL);
