@@ -37,6 +37,10 @@
 
 #include "uuid.h"
 
+#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501
+#  error You need to compile against Lua 5.1 or higher
+#endif
+
 #define TYPE_UUID	"org.conman.uuid:UUID"
 
 /***********************************************************************/
@@ -53,14 +57,14 @@ static int	uuidlua_breakout	(lua_State *const);
 
 /************************************************************************/
 
-static const struct luaL_reg muuid_reg[] =
+static const struct luaL_Reg muuid_reg[] =
 {
   { "parse"	, uuidlua_parse		} ,
   { "breakout"	, uuidlua_breakout	} ,
   { NULL	, NULL			}
 };
 
-static const struct luaL_reg muuid_meta[] =
+static const struct luaL_Reg muuid_meta[] =
 {
   { "__tostring"	, uuidlua_meta___tostring	} ,
   { "__eq"		, uuidlua_meta___eq		} ,
@@ -75,10 +79,19 @@ static const struct luaL_reg muuid_meta[] =
 int luaopen_org_conman_uuid(lua_State *const L)
 {
   luaL_newmetatable(L,TYPE_UUID);
+
+#if LUA_VERSION_NUM == 501
   luaL_register(L,NULL,muuid_meta);
-  
+#else
+  luaL_setfuncs(L,muuid_meta,0);
+#endif
+
+#if LUA_VERSION_NUM == 501
   luaL_register(L,"org.conman.uuid",muuid_reg);
-  
+#else
+  luaL_newlib(L,muuid_reg);
+#endif
+
   lua_pushliteral(L,UUID_VERSION);
   lua_setfield(L,-2,"_VERSION");
   
