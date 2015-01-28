@@ -30,7 +30,7 @@
 #  define __attribute__(x)
 #endif
 
-#if RAND_MAX == SHORT_MAX
+#if RAND_MAX == SHRT_MAX
   typedef unsigned short rand__t;
 #else
   typedef unsigned int   rand__t;
