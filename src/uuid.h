@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <limits.h>
 
 #ifndef __GNUC__
 #  define __attribute__(x)
