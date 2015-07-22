@@ -79,9 +79,13 @@ extern const uuid__t c_uuid_null;
 
 int	uuidlib_v1		(uuid__t *const,const int)                                           __attribute__((nonnull,nothrow));
 int	uuidlib_v2		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
+#ifndef NO_OPENSSL
 int	uuidlib_v3		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
+#endif
 int	uuidlib_v4		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
+#ifndef NO_OPENSSL
 int	uuidlib_v5		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
+#endif
 int	uuidlib_cmp		(const uuid__t *const restrict,const uuid__t *const restrict)        __attribute__((nonnull,nothrow));
 int	uuidlib_parse		(uuid__t *const,const char *)                                        __attribute__((nonnull,nothrow));
 int	uuidlib_toa		(const uuid__t *const,char *dest,size_t)                             __attribute__((nonnull,nothrow));
