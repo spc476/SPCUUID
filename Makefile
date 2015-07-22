@@ -38,7 +38,7 @@ ifeq ($(UNAME),SunOS)
 endif
 
 ifeq ($(UNAME),Darwin)
-  CC      = gc -std=c99
+  CC      = gcc -std=c99
   CFLAGS  = -g -Wall -Wextra -pedantic
   LDFLAGS = -shared
   SHARED  = -fPIC -undefined dynamic_lookup -all_load
