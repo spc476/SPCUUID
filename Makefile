@@ -43,6 +43,10 @@ ifeq ($(UNAME),Darwin)
   LDFLAGS = -shared
   SHARED  = -fPIC -undefined dynamic_lookup -all_load
 endif
+
+ifneq ($(LUA_INCDIR),)
+  override CFLAGS += -I$(LUA_INCDIR)
+endif
   
 # =============================================
 
