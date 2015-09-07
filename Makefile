@@ -32,26 +32,36 @@ ifeq ($(UNAME),Linux)
 endif
 
 ifeq ($(UNAME),SunOS)
-  CC     = cc -xc99
-  CFLAGS = -g
-  LDLIBS = -lrt -lsocket -lnsl -lcrypto
+  CC      = cc -xc99
+  CFLAGS  = -g
+  LDFLAGS = 
+  LDLIBS  = -lrt -lsocket -lnsl -lcrypto
+  SHARED  = -G
 endif
 
 ifeq ($(UNAME),Darwin)
   CC      = gcc -std=c99
   CFLAGS  = -g -Wall -Wextra -pedantic
   LDFLAGS = -shared
+  LDLIBS  = 
   SHARED  = -fPIC -undefined dynamic_lookup -all_load
 endif
 
 ifneq ($(LUA_INCDIR),)
   override CFLAGS += -I$(LUA_INCDIR)
 endif
+
+INSTALL         = /usr/bin/install
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA    = $(INSTALL) -m 644
+
+prefix          = /usr/local
+exec_prefix     = $(prefix)
+includedir      = $(prefix)/include
+libdir          = $(exec_prefix)/lib
   
 # =============================================
 
-INCLUDE = /usr/local/include
-LIB     = /usr/local/lib
 LUALIB  = /usr/local/lib/lua/5.1
 
 # ============================================
@@ -144,20 +154,21 @@ so/uuidlib_v5.o    : src/uuidlib_v5.c    src/uuid.h
 # ===================================================
 
 install: lib obj lib/libspcuuid.a
-	install -d $(INCLUDE)/org/coman
-	install src/uuid.h $(INCLUDE)/org/conman
-	install lib/libspcuuid.a $(LIB)
+	$(INSTALL) -d $(DESTDIR)$(includedir)/org/conman
+	$(INSTALL) -d $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) src/uuid.h $(DESTDIR)$(includedir)/org/conman
+	$(INSTALL_PROGRAM) lib/libspcuuid.a $(DESTDIR)$(libdir)/libspcuuid.a
 
 remove:
-	$(RM) -rf $(INCLUDE)/org/conman/uuid.h
-	$(RM) -rf $(LIB)/libspcuuid.a
+	$(RM) $(DESTDIR)$(includedir)/org/conman/uuid.h
+	$(RM) $(DESTDIR)$(libdir)/libspcuuid.a
 	
 install-lua: lua
-	install -d $(LUALIB)/org/conman
-	install lib/lua-uuid.so $(LUALIB)/org/conman/uuid.so
+	$(INSTALL) -d $(DESTDIR)$(LUALIB)/org/conman
+	$(INSTALL_PROGRAM) lib/lua-uuid.so $(DESTDIR)$(LUALIB)/org/conman/uuid.so
 
 remove-lua:
-	$(RM) -rf $(LUALIB)/org/conman/uuid.so
+	$(RM) $(DESTDIR)$(LUALIB)/org/conman/uuid.so
 	
 clean:
-	$(RM) -rf *~ src/*~ lib/ obj/ so/
+	$(RM) -r *~ src/*~ lib/ obj/ so/
