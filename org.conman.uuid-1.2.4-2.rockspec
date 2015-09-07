@@ -1,5 +1,5 @@
 package = "org.conman.uuid"
-version = "1.2.4-1"
+version = "1.2.4-2"
 
 source =
 {
@@ -35,8 +35,9 @@ build =
 
   build_variables =
   {
-    CC     = "$(CC) -std=c99",
-    CFLAGS = "$(CFLAGS)",
+    CC         = "$(CC) -std=c99",
+    CFLAGS     = "$(CFLAGS)",
+    LUA_INCDIR = "$(LUA_INCDIR)"
   },
 
   install_variables =
