@@ -1,5 +1,5 @@
 package = "org.conman.uuid"
-version = "1.2.5-1"
+version = "1.2.5-2"
 
 source =
 {
@@ -24,7 +24,7 @@ description =
 
 dependencies = 
 {
-  "lua >= 5.1, < 5.3"
+  "lua >= 5.1, < 5.4"
 }
 
 build =
