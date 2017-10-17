@@ -19,7 +19,7 @@
 #
 ########################################################################
 
-.PHONY: all clean install install-lua remove remove-lua
+.PHONY: all clean install install-lua uninstall uninstall-lua
 
 UNAME := $(shell uname)
 
@@ -47,10 +47,6 @@ ifeq ($(UNAME),Darwin)
   SHARED  = -fPIC -undefined dynamic_lookup -all_load
 endif
 
-ifneq ($(LUA_INCDIR),)
-  override CFLAGS += -I$(LUA_INCDIR)
-endif
-
 INSTALL         = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
 INSTALL_DATA    = $(INSTALL) -m 644
@@ -62,7 +58,13 @@ libdir          = $(exec_prefix)/lib
   
 # =============================================
 
-LUALIB  = /usr/local/lib/lua/5.1
+LUA         ?= lua
+LUA_VERSION := $(shell $(LUA) -e "print(_VERSION:match '^Lua (.*)')")
+LIBDIR      ?= $(libdir)/lua/$(LUA_VERSION)
+
+ifneq ($(LUA_INCDIR),)
+  override CFLAGS += -I$(LUA_INCDIR)
+endif
 
 # ============================================
 
@@ -159,16 +161,16 @@ install: lib obj lib/libspcuuid.a
 	$(INSTALL_DATA) src/uuid.h $(DESTDIR)$(includedir)/org/conman
 	$(INSTALL_PROGRAM) lib/libspcuuid.a $(DESTDIR)$(libdir)/libspcuuid.a
 
-remove:
+uninstall:
 	$(RM) $(DESTDIR)$(includedir)/org/conman/uuid.h
 	$(RM) $(DESTDIR)$(libdir)/libspcuuid.a
 	
-install-lua: lua
-	$(INSTALL) -d $(DESTDIR)$(LUALIB)/org/conman
-	$(INSTALL_PROGRAM) lib/lua-uuid.so $(DESTDIR)$(LUALIB)/org/conman/uuid.so
+install-lua: so lib/lua-uuid.so
+	$(INSTALL) -d $(DESTDIR)$(LIBDIR)/org/conman
+	$(INSTALL_PROGRAM) lib/lua-uuid.so $(DESTDIR)$(LIBDIR)/org/conman/uuid.so
 
-remove-lua:
-	$(RM) $(DESTDIR)$(LUALIB)/org/conman/uuid.so
+uninstall-lua:
+	$(RM) $(DESTDIR)$(LIBDIR)/org/conman/uuid.so
 	
 clean:
 	$(RM) -r *~ src/*~ lib/ obj/ so/
