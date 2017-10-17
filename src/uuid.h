@@ -38,8 +38,8 @@
 #endif
 
 #define UUID_VERS(m,n,p)	(((m) << 16) | ((n) << 8) | (p))
-#define UUID_API		UUID_VERS(1,2,5)
-#define UUID_VERSION		"1.2.5"
+#define UUID_API		UUID_VERS(1,2,8)
+#define UUID_VERSION		"1.2.8"
 #define UUID_EPOCH		0x01B21DD213814000LL
 
 /*******************************************************************/
