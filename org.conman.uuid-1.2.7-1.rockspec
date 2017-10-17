@@ -1,10 +1,10 @@
 package = "org.conman.uuid"
-version = "1.2.6-1"
+version = "1.2.7-1"
 
 source =
 {
   url = "git://github.com/spc476/SPCUUID.git",
-  tag = "1.2.6"
+  tag = "1.2.7"
 }
 
 supported_platforms = { "unix" }
@@ -37,7 +37,7 @@ build =
   {
     CC         = "c99",
     CFLAGS     = "$(CFLAGS)",
-    LUA_INCDIR = "$(LUA_INCDIR)"
+    LUA_INCDIR = "$(LUA_INCDIR)",
     LUA        = "$(LUA)"
   },
 
