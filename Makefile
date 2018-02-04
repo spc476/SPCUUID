@@ -159,7 +159,7 @@ install: lib obj lib/libspcuuid.a
 	$(INSTALL) -d $(DESTDIR)$(includedir)/org/conman
 	$(INSTALL) -d $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) src/uuid.h $(DESTDIR)$(includedir)/org/conman
-	$(INSTALL_PROGRAM) lib/libspcuuid.a $(DESTDIR)$(libdir)/libspcuuid.a
+	$(INSTALL_DATA) lib/libspcuuid.a $(DESTDIR)$(libdir)/libspcuuid.a
 
 uninstall:
 	$(RM) $(DESTDIR)$(includedir)/org/conman/uuid.h
