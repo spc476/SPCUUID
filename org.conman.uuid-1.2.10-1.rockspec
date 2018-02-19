@@ -1,10 +1,10 @@
 package = "org.conman.uuid"
-version = "1.2.9-1"
+version = "1.2.10-1"
 
 source =
 {
   url = "git://github.com/spc476/SPCUUID.git",
-  tag = "1.2.9"
+  tag = "1.2.10"
 }
 
 supported_platforms = { "unix" }
@@ -32,11 +32,17 @@ build =
   type            = "make",
   build_target    = "lua",
   install_target  = "install-lua",
-
+  
+  platforms =
+  {
+    linux   = { build_variables = { CC = "gcc -std=c99" } },
+    solaris = { build_varaibles = { CC = "c99"          } },
+  },
+  
   build_variables =
   {
-    CC         = "c99",
-    CFLAGS     = "$(CFLAGS)",
+    CC         = "$(CC)",
+    CFLAGS     = "$(CFLAGS) -DNDEBUG",
     LUA_INCDIR = "$(LUA_INCDIR)",
     LUA        = "$(LUA)"
   },

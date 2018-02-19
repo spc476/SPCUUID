@@ -19,14 +19,12 @@
 #
 ########################################################################
 
-.PHONY: all clean install install-lua uninstall uninstall-lua
-
 UNAME := $(shell uname)
 
 ifeq ($(UNAME),Linux)
   CC      = gcc -std=c99
   CFLAGS  = -g -Wall -Wextra -pedantic
-  LDFLAGS = -shared
+  LDFLAGS = -g -shared
   LDLIBS  = -lrt -lcrypto
   SHARED  = -fPIC
 endif
@@ -34,7 +32,7 @@ endif
 ifeq ($(UNAME),SunOS)
   CC      = cc -xc99
   CFLAGS  = -g
-  LDFLAGS = 
+  LDFLAGS = -g
   LDLIBS  = -lrt -lsocket -lnsl -lcrypto
   SHARED  = -G
 endif
@@ -42,9 +40,9 @@ endif
 ifeq ($(UNAME),Darwin)
   CC      = gcc -std=c99
   CFLAGS  = -g -Wall -Wextra -pedantic
-  LDFLAGS = -shared
-  LDLIBS  = 
-  SHARED  = -fPIC -undefined dynamic_lookup -all_load
+  LDFLAGS = -g -bundle -undefined dynamic_lookup -all_load
+  LDLIBS  = -lcrypto
+  SHARED  = -fPIC
 endif
 
 INSTALL         = /usr/bin/install
@@ -73,6 +71,8 @@ obj/%.o : src/%.c
 
 so/%.o : src/%.c
 	$(CC) $(CFLAGS) $(SHARED) -c -o $@ $<
+
+.PHONY: all clean install install-lua uninstall uninstall-lua
 
 all : lib obj lib/libspcuuid.a
 
