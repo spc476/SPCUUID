@@ -35,7 +35,7 @@ int uuidlib_v3(
 )
 {
   const EVP_MD *m = EVP_md5();
-  EVP_MD_CTX    ctx;
+  EVP_MD_CTX   *ctx;
   unsigned char hash[EVP_MAX_MD_SIZE];
   unsigned int  hashsize;
   
@@ -44,14 +44,19 @@ int uuidlib_v3(
   assert(name      != NULL);
   assert(len       >  0);
   
-  EVP_DigestInit(&ctx,m);
-  EVP_DigestUpdate(&ctx,namespace->flat,sizeof(struct uuid));
-  EVP_DigestUpdate(&ctx,name,len);
-  EVP_DigestFinal(&ctx,hash,&hashsize);
+  ctx = EVP_MD_CTX_new();
+  if (ctx == NULL) return 1;
+
+  EVP_DigestInit(ctx,m);
+  EVP_DigestUpdate(ctx,namespace->flat,sizeof(struct uuid));
+  EVP_DigestUpdate(ctx,name,len);
+  EVP_DigestFinal(ctx,hash,&hashsize);
   
   memcpy(uuid->flat,hash,sizeof(struct uuid));
   uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x30;
   uuid->flat[8] = (uuid->flat[8] & 0x3F) | 0x80;
+
+  EVP_MD_CTX_free(ctx);
   return 0;
 }
 
