@@ -1,10 +1,10 @@
 package = "org.conman.uuid"
-version = "1.2.12-1"
+version = "1.2.13-1"
 
 source =
 {
   url = "git://github.com/spc476/SPCUUID.git",
-  tag = "1.2.12"
+  tag = "1.2.13"
 }
 
 supported_platforms = { "unix" }
@@ -24,7 +24,7 @@ description =
 
 dependencies = 
 {
-  "lua >= 5.1, < 5.4"
+  "lua >= 5.1, <= 5.4"
 }
 
 build =
