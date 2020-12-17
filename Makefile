@@ -165,7 +165,7 @@ uninstall:
 	$(RM) $(DESTDIR)$(includedir)/org/conman/uuid.h
 	$(RM) $(DESTDIR)$(libdir)/libspcuuid.a
 	
-install-lua: so lib/lua-uuid.so
+install-lua: lib so lib/lua-uuid.so
 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)/org/conman
 	$(INSTALL_PROGRAM) lib/lua-uuid.so $(DESTDIR)$(LIBDIR)/org/conman/uuid.so
 
