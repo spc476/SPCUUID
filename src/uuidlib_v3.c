@@ -21,11 +21,18 @@
 
 #include <string.h>
 #include <assert.h>
+#include <openssl/opensslv.h>
 #include <openssl/evp.h>
 
 #include "uuid.h"
 
+#ifndef OPENSSL_VERSION_NUMBER
+#  error Could not determine OPENSSL version
+#endif
+
 /*************************************************************************/
+
+#if OPENSSL_VERSION_NUMBER < 0x1010000fL
 
 int uuidlib_v3(
 	uuid__t       *const uuid,
@@ -56,3 +63,43 @@ int uuidlib_v3(
 }
 
 /**************************************************************************/
+#else
+
+#include <errno.h>
+
+int uuidlib_v3(
+	uuid__t       *const uuid,
+	const uuid__t *const namespace,
+	const void    *const name,
+	const size_t         len
+)
+{
+  const EVP_MD *m = EVP_md5();
+  EVP_MD_CTX   *ctx;
+  unsigned char hash[EVP_MAX_MD_SIZE];
+  unsigned int  hashsize;
+  
+  assert(uuid      != NULL);
+  assert(namespace != NULL);
+  assert(name      != NULL);
+  assert(len       >  0);
+  
+  ctx = EVP_MD_CTX_new();
+  if (ctx == NULL) return ENOMEM;
+  
+  EVP_DigestInit(ctx,m);
+  EVP_DigestUpdate(ctx,namespace->flat,sizeof(struct uuid));
+  EVP_DigestUpdate(ctx,name,len);
+  EVP_DigestFinal(ctx,hash,&hashsize);
+  
+  memcpy(uuid->flat,hash,sizeof(struct uuid));
+  uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x30;
+  uuid->flat[8] = (uuid->flat[8] & 0x3F) | 0x80;
+  
+  EVP_MD_CTX_free(ctx);
+  return 0;
+}
+
+/**************************************************************************/
+
+#endif
