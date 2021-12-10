@@ -1,10 +1,10 @@
 package = "org.conman.uuid"
-version = "1.2.14-1"
+version = "1.2.15-1"
 
 source =
 {
   url = "git://github.com/spc476/SPCUUID.git",
-  tag = "1.2.14"
+  tag = "1.2.15"
 }
 
 supported_platforms = { "unix" }

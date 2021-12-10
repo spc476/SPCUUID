@@ -102,7 +102,7 @@ lib/libspcuuid.a : obj/uuid_ns_dns.o	\
 		obj/uuidlib_v3.o	\
 		obj/uuidlib_v4.o	\
 		obj/uuidlib_v5.o
-	$(AR) rscu $@ $?
+	$(AR) $(ARFLAGS) $@ $?
 
 lib/lua-uuid.so : so/luauuid.o		\
 		so/uuid_ns_dns.o	\
