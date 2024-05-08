@@ -26,13 +26,13 @@
 
 /*************************************************************************/
 
-int uuidlib_v4(uuid__t *const uuid)
+int uuidlib_v4(uuid__t *uuid)
 {
   assert(uuid != NULL);
   
   for (size_t i = 0 ; i < (sizeof(struct uuid) / sizeof(rand__t)) ; i++)
     uuid->rnd[i] = (unsigned)rand() + (unsigned)rand();
-  
+    
   uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x40;
   uuid->flat[8] = (uuid->flat[8] & 0x3F) | 0x80;
   return 0;

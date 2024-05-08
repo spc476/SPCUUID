@@ -1,6 +1,6 @@
 /*********************************************************************
 *
-* Copyright 2013 by Sean Conner.  All Rights Reserved.
+* Copyright 2024 by Sean Conner.  All Rights Reserved.
 *
 * This library is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License as published by
@@ -36,7 +36,7 @@ extern int     uuidlib_init(void);
 
 /***********************************************************************/
 
-int uuidlib_v1(uuid__t *uuid,int clock)
+int uuidlib_v6(uuid__t *uuid,int clock)
 {
   int64_t timestamp;
   
@@ -65,9 +65,10 @@ int uuidlib_v1(uuid__t *uuid,int clock)
             + UUID_EPOCH;
 #endif
 
-  uuid->uuid.time_hi_and_version       = htons(timestamp >> 48);
-  uuid->uuid.time_mid                  = htons((timestamp >> 32) & 0xFFFFLL);
-  uuid->uuid.time_low                  = htonl(timestamp & 0xFFFFFFFFLL);
+  uuid->uuid6.time_high            = htonl((timestamp >> 28) & 0xFFFFFFFFLL);
+  uuid->uuid6.time_mid             = htons((timestamp >> 12) & 0xFFFFLL);
+  uuid->uuid6.time_low_and_version = htons(timestamp & 0x0FFFLL);
+  
   if (clock < 0)
   {
     uuid->uuid.clock_seq_hi_and_reserved = rand() & 0xFF;
@@ -80,7 +81,7 @@ int uuidlib_v1(uuid__t *uuid,int clock)
   }
   memcpy(uuid->uuid.node,m_mac,6);
   
-  uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x10;
+  uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x60;
   uuid->flat[8] = (uuid->flat[8] & 0x3F) | 0x80;
   return 0;
 }

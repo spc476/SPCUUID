@@ -28,8 +28,8 @@
 /*************************************************************************/
 
 int uuidlib_cmp(
-	const uuid__t *const restrict uuid1,
-	const uuid__t *const restrict uuid2
+        const uuid__t *const restrict uuid1,
+        const uuid__t *const restrict uuid2
 )
 {
   uint32_t a32;
@@ -51,7 +51,7 @@ int uuidlib_cmp(
     return -1;
   else if (a32 > b32)
     return 1;
-  
+    
   a16 = ntohs(uuid1->uuid.time_mid);
   b16 = ntohs(uuid2->uuid.time_mid);
   
@@ -59,7 +59,7 @@ int uuidlib_cmp(
     return -1;
   else if (a16 > b16)
     return 1;
-  
+    
   a16 = ntohs(uuid1->uuid.time_hi_and_version);
   b16 = ntohs(uuid2->uuid.time_hi_and_version);
   
@@ -67,17 +67,17 @@ int uuidlib_cmp(
     return -1;
   else if (a16 > b16)
     return 1;
-      
+    
   if (uuid1->uuid.clock_seq_hi_and_reserved < uuid2->uuid.clock_seq_hi_and_reserved)
     return -1;
   else if (uuid1->uuid.clock_seq_hi_and_reserved > uuid2->uuid.clock_seq_hi_and_reserved)
     return 1;
-  
+    
   if (uuid1->uuid.clock_seq_low < uuid2->uuid.clock_seq_low)
     return -1;
   else if (uuid1->uuid.clock_seq_low > uuid2->uuid.clock_seq_low)
     return 1;
-  
+    
   return memcmp(uuid1->uuid.node,uuid2->uuid.node,6);
 }
 

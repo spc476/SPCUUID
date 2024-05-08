@@ -1,6 +1,6 @@
 /*********************************************************************
 *
-* Copyright 2013 by Sean Conner.  All Rights Reserved.
+* Copyright 2024 by Sean Conner.  All Rights Reserved.
 *
 * This library is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License as published by
@@ -19,14 +19,18 @@
 *
 *********************************************************************/
 
+#include <assert.h>
 #include "uuid.h"
 
-        /* per RFC-4122 */
-        
-const uuid__t c_uuid_null =
+/*************************************************************************/
+
+int uuidlib_v8(uuid__t *uuid)
 {
-  .flat = {
-            0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 ,
-            0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00
-          }
-};
+  assert(uuid != NULL);
+  
+  uuid->flat[6] = (uuid->flat[6] & 0x0F) | 0x80;
+  uuid->flat[8] = (uuid->flat[8] & 0x3F) | 0x80;
+  return 0;
+}
+
+/*************************************************************************/

@@ -68,7 +68,7 @@ int uuidlib_init(void)
   
   if (ioctl(sock,SIOCGIFCONF,&ifc) < 0)
     goto uuidlib_init_error;
-  
+    
   it  = ifc.ifc_req;
   end = it + (ifc.ifc_len / sizeof(struct ifreq));
   
@@ -79,10 +79,10 @@ int uuidlib_init(void)
       
     if ((it->ifr_flags & IFF_LOOPBACK) == IFF_LOOPBACK)
       continue;
-
+      
 #if defined(__SunOS)
     struct arpreq arpreq;
-
+    
     memcpy(&arpreq.arp_pa,&it->ifr_addr,sizeof(it->ifr_addr));
     if (ioctl(sock,SIOCGARP,&arpreq) < 0)
       goto uuidlib_init_error;
@@ -104,7 +104,7 @@ int uuidlib_init(void)
   /*-----------------------------------------------------------------------
   ; we found no Ethernet interface to use.  So let's make up a MAC address
   ;
-  ; The size calculation of rndbuf[] is done such that it will be the 
+  ; The size calculation of rndbuf[] is done such that it will be the
   ; smallest integral size of rand__t that is larger than a MAC address.
   ;-----------------------------------------------------------------------*/
   
@@ -114,10 +114,10 @@ int uuidlib_init(void)
   
   for (size_t i = 0 ; i < (sizeof(rndbuf) / sizeof(rand__t)) ; i++)
     rndbuf[i] = (unsigned)rand() + (unsigned)rand();
-  
+    
   memcpy(m_mac,rndbuf,sizeof(m_mac));
-  m_mac[0] &= 0xFE;	/* this is an individual address */
-  m_mac[0] |= 0x02;	/* this is an assigned (local) address */
+  m_mac[0] &= 0xFE;     /* this is an individual address */
+  m_mac[0] |= 0x02;     /* this is an assigned (local) address */
   
   errno = 0;
   

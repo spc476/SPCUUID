@@ -1,6 +1,6 @@
 /*********************************************************************
 *
-* Copyright 2013 by Sean Conner.  All Rights Reserved.
+* Copyright 2024 by Sean Conner.  All Rights Reserved.
 *
 * This library is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License as published by
@@ -21,12 +21,12 @@
 
 #include "uuid.h"
 
-        /* per RFC-4122 */
+        /* per RFC-9662 */
         
-const uuid__t c_uuid_null =
+const uuid__t c_uuid_max =
 {
   .flat = {
-            0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 ,
-            0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00
+            0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF ,
+            0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF
           }
 };

@@ -28,10 +28,10 @@
 /************************************************************************/
 
 static int uuidlib_parse_seg(
-	uuid__t     *const uuid,
-	size_t             idx,
-	const char       **ptext,
-	const size_t       bytes
+        uuid__t     *const uuid,
+        size_t             idx,
+        const char       **ptext,
+        const size_t       bytes
 )
 {
   char        buf[3];
@@ -57,9 +57,9 @@ static int uuidlib_parse_seg(
     if (errno != 0) return errno;
   }
   
-  if ((*p != '-') && (*p != '\0')) 
+  if ((*p != '-') && (*p != '\0'))
     return EINVAL;
-  
+    
   *ptext = p + 1;
   return 0;
 }

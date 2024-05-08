@@ -33,25 +33,25 @@ int uuidlib_toa(const uuid__t *const uuid,char *dest,size_t size)
   assert(size >= 37);
   
   return snprintf(
-  	dest,
-  	size,
-  	"%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
-  	uuid->flat[0],
-  	uuid->flat[1],
-  	uuid->flat[2],
-  	uuid->flat[3],
-  	uuid->flat[4],
-  	uuid->flat[5],
-  	uuid->flat[6],
-  	uuid->flat[7],
-  	uuid->flat[8],
-  	uuid->flat[9],
-  	uuid->flat[10],
-  	uuid->flat[11],
-  	uuid->flat[12],
-  	uuid->flat[13],
-  	uuid->flat[14],
-  	uuid->flat[15]
+        dest,
+        size,
+        "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+        uuid->flat[0],
+        uuid->flat[1],
+        uuid->flat[2],
+        uuid->flat[3],
+        uuid->flat[4],
+        uuid->flat[5],
+        uuid->flat[6],
+        uuid->flat[7],
+        uuid->flat[8],
+        uuid->flat[9],
+        uuid->flat[10],
+        uuid->flat[11],
+        uuid->flat[12],
+        uuid->flat[13],
+        uuid->flat[14],
+        uuid->flat[15]
   );
 }
 

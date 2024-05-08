@@ -21,8 +21,8 @@
 
 #include "uuid.h"
 
-	/* per RFC-4122 */
-
+        /* per RFC-4122 */
+        
 const uuid__t c_uuid_namespace_url =
 {
   .flat = {

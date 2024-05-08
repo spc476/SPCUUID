@@ -38,8 +38,8 @@
 #endif
 
 #define UUID_VERS(m,n,p)	(((m) << 16) | ((n) << 8) | (p))
-#define UUID_API		UUID_VERS(1,2,18)
-#define UUID_VERSION		"1.2.18"
+#define UUID_API		UUID_VERS(1,3,0)
+#define UUID_VERSION		"1.3.0"
 #define UUID_EPOCH		0x01B21DD213814000LL
 
 /*******************************************************************/
@@ -58,11 +58,32 @@ struct uuid
   uint8_t  node[6];
 } __attribute__((packed));
 
+struct uuid6
+{
+  uint32_t time_high;
+  uint16_t time_mid;
+  uint16_t time_low_and_version;
+  uint8_t  clock_seq_hi_and_reserved;
+  uint8_t  clock_seq_low;
+  uint8_t  node[6];
+} __attribute__((packed));
+
+struct uuid7
+{
+  uint32_t utime_msh;
+  uint16_t utime_msl;
+  uint16_t ver_rnd;
+  uint32_t var_rnd;
+  uint32_t rnd;
+} __attribute__((packed));
+
 typedef union 
 {
-  struct uuid uuid;
-  uint8_t     flat[sizeof(struct uuid)];
-  rand__t     rnd [sizeof(struct uuid) / sizeof(rand__t)];
+  struct uuid  uuid;
+  struct uuid6 uuid6;
+  struct uuid7 uuid7;
+  uint8_t      flat[sizeof(struct uuid)];
+  rand__t      rnd [sizeof(struct uuid) / sizeof(rand__t)];
 } __attribute__((packed)) uuid__t;
 
 #ifdef __SunOS
@@ -71,19 +92,23 @@ typedef union
 
 /*******************************************************************/
 
-extern const uuid__t c_uuid_namespace_dns;
-extern const uuid__t c_uuid_namespace_url;
-extern const uuid__t c_uuid_namespace_oid;
-extern const uuid__t c_uuid_namespace_x500;
-extern const uuid__t c_uuid_null;
+extern uuid__t const c_uuid_namespace_dns;
+extern uuid__t const c_uuid_namespace_url;
+extern uuid__t const c_uuid_namespace_oid;
+extern uuid__t const c_uuid_namespace_x500;
+extern uuid__t const c_uuid_null;
+extern uuid__t const c_uuid_max;
 
-int	uuidlib_v1		(uuid__t *const,const int)                                           __attribute__((nonnull,nothrow));
-int	uuidlib_v2		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
-int	uuidlib_v3		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
-int	uuidlib_v4		(uuid__t *const)                                                     __attribute__((nonnull,nothrow));
-int	uuidlib_v5		(uuid__t *const,const uuid__t *const,const void *const,const size_t) __attribute__((nonnull,nothrow));
-int	uuidlib_cmp		(const uuid__t *const restrict,const uuid__t *const restrict)        __attribute__((nonnull,nothrow));
-int	uuidlib_parse		(uuid__t *const,const char *)                                        __attribute__((nonnull,nothrow));
-int	uuidlib_toa		(const uuid__t *const,char *dest,size_t)                             __attribute__((nonnull,nothrow));
+extern int uuidlib_v1    (uuid__t *,const int)                             __attribute__((nonnull,nothrow));
+extern int uuidlib_v2    (uuid__t *)                                       __attribute__((nonnull,nothrow));
+extern int uuidlib_v3    (uuid__t *,uuid__t const *,void const *,size_t)   __attribute__((nonnull,nothrow));
+extern int uuidlib_v4    (uuid__t *)                                       __attribute__((nonnull,nothrow));
+extern int uuidlib_v5    (uuid__t *,uuid__t const *,void const *,size_t)   __attribute__((nonnull,nothrow));
+extern int uuidlib_v6    (uuid__t *,int)                                   __attribute__((nonnull,nothrow));
+extern int uuidlib_v7    (uuid__t *)                                       __attribute__((nonnull,nothrow));
+extern int uuidlib_v8    (uuid__t *)                                       __attribute__((nonnull,nothrow));
+extern int uuidlib_cmp   (uuid__t const *restrict,uuid__t const *restrict) __attribute__((nonnull,nothrow));
+extern int uuidlib_parse (uuid__t *,char const *)                          __attribute__((nonnull,nothrow));
+extern int uuidlib_toa   (uuid__t const *,char *dest,size_t)               __attribute__((nonnull,nothrow));
 
 #endif

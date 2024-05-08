@@ -26,9 +26,10 @@
 
 /*************************************************************************/
 
-int uuidlib_v2(uuid__t *const uuid __attribute__((unused)))
+int uuidlib_v2(uuid__t *uuid)
 {
   assert(uuid != NULL);
+  (void)uuid;
   return ENOSYS;
 }
 

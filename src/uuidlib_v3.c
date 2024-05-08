@@ -35,10 +35,10 @@
 #if OPENSSL_VERSION_NUMBER < 0x1010000fL
 
 int uuidlib_v3(
-	uuid__t       *const uuid,
-	const uuid__t *const namespace,
-	const void    *const name,
-	const size_t         len
+        uuid__t       *uuid,
+        uuid__t const *namespace,
+        void    const *name,
+        size_t         len
 )
 {
   const EVP_MD *m = EVP_md5();
@@ -68,10 +68,10 @@ int uuidlib_v3(
 #include <errno.h>
 
 int uuidlib_v3(
-	uuid__t       *const uuid,
-	const uuid__t *const namespace,
-	const void    *const name,
-	const size_t         len
+        uuid__t       *uuid,
+        uuid__t const *namespace,
+        void    const *name,
+        size_t         len
 )
 {
   const EVP_MD *m = EVP_md5();

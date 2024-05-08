@@ -41,37 +41,37 @@
 #  error You need to compile against Lua 5.1 or higher
 #endif
 
-#define TYPE_UUID	"org.conman.uuid:UUID"
+#define TYPE_UUID       "org.conman.uuid:UUID"
 
 /***********************************************************************/
 
-static void	uuidluaL_pushuuid	(lua_State *const,const uuid__t *const);
-static int	uuidlua_meta___tostring	(lua_State *const);
-static int	uuidlua_meta___eq	(lua_State *const);
-static int	uuidlua_meta___le	(lua_State *const);
-static int	uuidlua_meta___lt	(lua_State *const);
-static int	uuidlua_meta___len	(lua_State *const);
-static int	uuidlua_meta___call	(lua_State *const);
-static int	uuidlua_parse		(lua_State *const);
-static int	uuidlua_breakout	(lua_State *const);
+static void     uuidluaL_pushuuid       (lua_State *const,const uuid__t *const);
+static int      uuidlua_meta___tostring (lua_State *const);
+static int      uuidlua_meta___eq       (lua_State *const);
+static int      uuidlua_meta___le       (lua_State *const);
+static int      uuidlua_meta___lt       (lua_State *const);
+static int      uuidlua_meta___len      (lua_State *const);
+static int      uuidlua_meta___call     (lua_State *const);
+static int      uuidlua_parse           (lua_State *const);
+static int      uuidlua_breakout        (lua_State *const);
 
 /************************************************************************/
 
 static const struct luaL_Reg muuid_reg[] =
 {
-  { "parse"	, uuidlua_parse		} ,
-  { "breakout"	, uuidlua_breakout	} ,
-  { NULL	, NULL			}
+  { "parse"     , uuidlua_parse         } ,
+  { "breakout"  , uuidlua_breakout      } ,
+  { NULL        , NULL                  }
 };
 
 static const struct luaL_Reg muuid_meta[] =
 {
-  { "__tostring"	, uuidlua_meta___tostring	} ,
-  { "__eq"		, uuidlua_meta___eq		} ,
-  { "__lt"		, uuidlua_meta___lt		} ,
-  { "__le"		, uuidlua_meta___le		} ,
-  { "__len"		, uuidlua_meta___len		} ,
-  { NULL		, NULL				}
+  { "__tostring"        , uuidlua_meta___tostring       } ,
+  { "__eq"              , uuidlua_meta___eq             } ,
+  { "__lt"              , uuidlua_meta___lt             } ,
+  { "__le"              , uuidlua_meta___le             } ,
+  { "__len"             , uuidlua_meta___len            } ,
+  { NULL                , NULL                          }
 };
 
 /*************************************************************************/
@@ -79,7 +79,7 @@ static const struct luaL_Reg muuid_meta[] =
 int luaopen_org_conman_uuid(lua_State *const L)
 {
   luaL_newmetatable(L,TYPE_UUID);
-
+  
 #if LUA_VERSION_NUM == 501
   luaL_register(L,NULL,muuid_meta);
 #else
@@ -105,6 +105,8 @@ int luaopen_org_conman_uuid(lua_State *const L)
   lua_setfield(L,-2,"X500");
   uuidluaL_pushuuid(L,&c_uuid_null);
   lua_setfield(L,-2,"NIL");
+  uuidluaL_pushuuid(L,&c_uuid_max);
+  lua_setfield(L,-2,"MAX");
   
   lua_createtable(L,0,1);
   lua_pushcfunction(L,uuidlua_meta___call);
@@ -198,22 +200,32 @@ static int uuidlua_meta___call(lua_State *const L)
   uuid__t    *uuid;
   uuid__t    *pns;
   uuid__t     ns;
-  const char *name;
+  char const *name;
   size_t      len;
-  const char *data;
+  char const *data;
   size_t      dlen;
   int         rc;
   bool        sha1;
+  
+  lua_settop(L,4);
   
   if (lua_isnoneornil(L,2))
   {
     uuid = lua_newuserdata(L,sizeof(uuid__t));
     uuidlib_v4(uuid);
   }
+  else if (lua_isboolean(L,2))
+  {
+    uuid = lua_newuserdata(L,sizeof(uuid__t));
+    uuidlib_v7(uuid);
+  }
   else if (lua_isnumber(L,2))
   {
     uuid = lua_newuserdata(L,sizeof(uuid__t));
-    uuidlib_v1(uuid,lua_tointeger(L,2));
+    if (lua_toboolean(L,3))
+      uuidlib_v6(uuid,lua_tointeger(L,2));
+    else
+      uuidlib_v1(uuid,lua_tointeger(L,2));
   }
   else if (lua_isstring(L,2))
   {
@@ -231,14 +243,23 @@ static int uuidlua_meta___call(lua_State *const L)
       }
     }
     
-    name = luaL_checklstring(L,3,&len);
-    sha1 = lua_isnoneornil(L,4);
     uuid = lua_newuserdata(L,sizeof(uuid__t));
     
-    if (sha1)
-      uuidlib_v5(uuid,&ns,name,len);
+    if (lua_isnoneornil(L,3))
+    {
+      *uuid = ns;
+      uuidlib_v8(uuid);
+    }
     else
-      uuidlib_v3(uuid,&ns,name,len);
+    {
+      name = luaL_checklstring(L,3,&len);
+      sha1 = lua_isnoneornil(L,4);
+      
+      if (sha1)
+        uuidlib_v5(uuid,&ns,name,len);
+      else
+        uuidlib_v3(uuid,&ns,name,len);
+    }
   }
   else if (lua_isuserdata(L,2))
   {
@@ -252,6 +273,11 @@ static int uuidlua_meta___call(lua_State *const L)
     else
       uuidlib_v3(uuid,pns,name,len);
   }
+  
+  /*-------------------------------------------------------
+  ; This is a mistake, but oh well, too late now to change.
+  ;--------------------------------------------------------*/
+  
   else
   {
     uuid = lua_newuserdata(L,sizeof(uuid__t));
@@ -331,12 +357,13 @@ static int uuidlua_breakout(lua_State *const L)
   }
   
   assert((uuid->flat[8] & 0x80) == 0x80);
-
-  switch(uuid->flat[6] & 0xF0)  
+  
+  lua_pushinteger(L,(uuid->flat[6] & 0xF0) >> 4);
+  lua_setfield(L,-2,"version");
+  
+  switch(uuid->flat[6] & 0xF0)
   {
     case 0x10:
-         lua_pushinteger(L,1);
-         lua_setfield(L,-2,"version");
          timestamp = ((int64_t)ntohs(uuid->uuid.time_hi_and_version) << 48)
                    | ((int64_t)ntohs(uuid->uuid.time_mid)            << 32)
                    | ((int64_t)ntohl(uuid->uuid.time_low));
@@ -351,38 +378,54 @@ static int uuidlua_breakout(lua_State *const L)
          lua_pushinteger(L,sequence);
          lua_setfield(L,-2,"clock_sequence");
          bytes = snprintf(
-         	node,
-         	sizeof(node),
-         	"%02X%02X%02X%02X%02X%02X",
-         	uuid->uuid.node[0],
-         	uuid->uuid.node[1],
-         	uuid->uuid.node[2],
-         	uuid->uuid.node[3],
-         	uuid->uuid.node[4],
-         	uuid->uuid.node[5]
+                node,
+                sizeof(node),
+                "%02X%02X%02X%02X%02X%02X",
+                uuid->uuid.node[0],
+                uuid->uuid.node[1],
+                uuid->uuid.node[2],
+                uuid->uuid.node[3],
+                uuid->uuid.node[4],
+                uuid->uuid.node[5]
          );
          lua_pushlstring(L,node,bytes);
          lua_setfield(L,-2,"node");
          break;
          
-    case 0x20:
-         lua_pushinteger(L,2);
-         lua_setfield(L,-2,"version");
+    case 0x60:
+         timestamp = ((int64_t)ntohl(uuid->uuid6.time_high) << 28)
+                   | ((int64_t)ntohs(uuid->uuid6.time_mid)  << 12)
+                   | ((int64_t)ntohs(uuid->uuid6.time_low_and_version) & 0xFFFLL);
+         timestamp -= UUID_EPOCH;
+         lua_pushnumber(L,(lua_Number)timestamp / 1000000.0);
+         lua_setfield(L,-2,"timestamp");
+         sequence = (uuid->uuid6.clock_seq_hi_and_reserved << 8)
+                  | (uuid->uuid6.clock_seq_low);
+         sequence &= 0x3FFF;
+         lua_pushinteger(L,sequence);
+         lua_setfield(L,-2,"clock_sequence");
+         bytes = snprintf(
+                node,
+                sizeof(node),
+                "%02X%02X%02X%02X%02X%02X",
+                uuid->uuid.node[0],
+                uuid->uuid.node[1],
+                uuid->uuid.node[2],
+                uuid->uuid.node[3],
+                uuid->uuid.node[4],
+                uuid->uuid.node[5]
+         );
+         lua_pushlstring(L,node,bytes);
+         lua_setfield(L,-2,"node");
          break;
          
-    case 0x30:
-         lua_pushinteger(L,3);
-         lua_setfield(L,-2,"version");
-         break;
-         
-    case 0x40:
-         lua_pushinteger(L,4);
-         lua_setfield(L,-2,"version");
-         break;
-         
-    case 0x50:
-         lua_pushinteger(L,5);
-         lua_setfield(L,-2,"version");
+    case 0x70:
+         timestamp = ((int64_t)ntohl(uuid->uuid7.utime_msh) << 16)
+                   | ((int64_t)ntohs(uuid->uuid7.utime_msl));
+         lua_pushnumber(L,(lua_Number)timestamp / 1000.0);
+         lua_setfield(L,-2,"timestamp");
+         lua_pushlstring(L,(char const *)&uuid->flat[6],10);
+         lua_setfield(L,-2,"random");
          break;
          
     default:

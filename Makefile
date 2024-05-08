@@ -94,6 +94,8 @@ lib/libspcuuid.a : obj/uuid_ns_dns.o	\
 		obj/uuid_ns_oid.o	\
 		obj/uuid_ns_url.o	\
 		obj/uuid_ns_x500.o	\
+		obj/uuid_ns_max.o       \
+		obj/uuidlib_init.o      \
 		obj/uuidlib_cmp.o	\
 		obj/uuidlib_parse.o	\
 		obj/uuidlib_toa.o	\
@@ -101,7 +103,10 @@ lib/libspcuuid.a : obj/uuid_ns_dns.o	\
 		obj/uuidlib_v2.o	\
 		obj/uuidlib_v3.o	\
 		obj/uuidlib_v4.o	\
-		obj/uuidlib_v5.o
+		obj/uuidlib_v5.o        \
+		obj/uuidlib_v6.o        \
+		obj/uuidlib_v7.o        \
+		obj/uuidlib_v8.o
 	$(AR) $(ARFLAGS) $@ $?
 
 lib/lua-uuid.so : so/luauuid.o		\
@@ -110,6 +115,8 @@ lib/lua-uuid.so : so/luauuid.o		\
 		so/uuid_ns_oid.o	\
 		so/uuid_ns_url.o	\
 		so/uuid_ns_x500.o	\
+		so/uuid_ns_max.o        \
+		so/uuidlib_init.o       \
 		so/uuidlib_cmp.o	\
 		so/uuidlib_parse.o	\
 		so/uuidlib_toa.o	\
@@ -117,7 +124,10 @@ lib/lua-uuid.so : so/luauuid.o		\
 		so/uuidlib_v2.o		\
 		so/uuidlib_v3.o		\
 		so/uuidlib_v4.o		\
-		so/uuidlib_v5.o
+		so/uuidlib_v5.o         \
+		so/uuidlib_v6.o         \
+		so/uuidlib_v7.o         \
+		so/uuidlib_v8.o
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 # ===========================================================
@@ -127,6 +137,8 @@ obj/uuid_ns_null.o  : src/uuid_ns_null.c  src/uuid.h
 obj/uuid_ns_oid.o   : src/uuid_ns_oid.c   src/uuid.h
 obj/uuid_ns_url.o   : src/uuid_ns_url.c   src/uuid.h
 obj/uuid_ns_x500.o  : src/uuid_ns_x500.c  src/uuid.h
+obj/uuid_ns_max.o   : src/uuid_ns_max.c   src/uuid.h
+obj/uuidlib_init.o  : src/uuidlib_init.c  src/uuid.h
 obj/uuidlib_cmp.o   : src/uuidlib_cmp.c   src/uuid.h
 obj/uuidlib_parse.o : src/uuidlib_parse.c src/uuid.h
 obj/uuidlib_toa.o   : src/uuidlib_toa.c   src/uuid.h
@@ -135,6 +147,9 @@ obj/uuidlib_v2.o    : src/uuidlib_v2.c    src/uuid.h
 obj/uuidlib_v3.o    : src/uuidlib_v3.c    src/uuid.h
 obj/uuidlib_v4.o    : src/uuidlib_v4.c    src/uuid.h
 obj/uuidlib_v5.o    : src/uuidlib_v5.c    src/uuid.h
+obj/uuidlib_v6.o    : src/uuidlib_v6.c    src/uuid.h
+obj/uuidlib_v7.o    : src/uuidlib_v7.c    src/uuid.h
+obj/uuidlib_v8.o    : src/uuidlib_v8.c    src/uuid.h
 
 # ===================================================
 
@@ -144,6 +159,8 @@ so/uuid_ns_null.o  : src/uuid_ns_null.c  src/uuid.h
 so/uuid_ns_oid.o   : src/uuid_ns_oid.c   src/uuid.h
 so/uuid_ns_url.o   : src/uuid_ns_url.c   src/uuid.h
 so/uuid_ns_x500.o  : src/uuid_ns_x500.c  src/uuid.h
+so/uuid_ns_max.o   : src/uuid_ns_max.c   src/uuid.h
+so/uuidlib_init.o  : src/uuidlib_init.c  src/uuid.h
 so/uuidlib_cmp.o   : src/uuidlib_cmp.c   src/uuid.h
 so/uuidlib_parse.o : src/uuidlib_parse.c src/uuid.h
 so/uuidlib_toa.o   : src/uuidlib_toa.c   src/uuid.h
@@ -152,6 +169,9 @@ so/uuidlib_v2.o    : src/uuidlib_v2.c    src/uuid.h
 so/uuidlib_v3.o    : src/uuidlib_v3.c    src/uuid.h
 so/uuidlib_v4.o    : src/uuidlib_v4.c    src/uuid.h
 so/uuidlib_v5.o    : src/uuidlib_v5.c    src/uuid.h
+so/uuidlib_v6.o    : src/uuidlib_v6.c    src/uuid.h
+so/uuidlib_v7.o    : src/uuidlib_v7.c    src/uuid.h
+so/uuidlib_v8.o    : src/uuidlib_v8.c    src/uuid.h
 
 # ===================================================
 
